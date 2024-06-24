@@ -16,13 +16,26 @@ function sendProject(json){
   });
 }
 
+//Fonction qui définit si le json est correcte
+function isJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        alert('JSON invalide')
+        return false;
+    }
+    return true;
+}
+
 // Fonction qui importe un projet via un fichier json
 function jsonChanged(file) {
   var reader = new FileReader();
   reader.addEventListener('load', function(e) {
     // contents of file in variable     
     var json = e.target.result;
-    sendProject(json);
+    if(isJsonString(json)) {
+        sendProject(json);
+    }
   });
   // read as text file
   reader.readAsText(file);  
@@ -52,7 +65,9 @@ function txtChanged(file, tags) {
   reader.addEventListener('load', function(e) {
     var text = e.target.result.split(/\r\n|\n/);
     var json = createJson(file.name, text, tags);
-    sendProject(json);
+    if(isJsonString(json)) {
+        sendProject(json);
+    }
   });
   // read as text file
   reader.readAsText(file);
